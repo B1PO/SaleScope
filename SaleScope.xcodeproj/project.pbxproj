@@ -11,6 +11,14 @@
 		6C8240A42BE15CC600E965AE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240A32BE15CC600E965AE /* ContentView.swift */; };
 		6C8240A62BE15CC900E965AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C8240A52BE15CC900E965AE /* Assets.xcassets */; };
 		6C8240A92BE15CC900E965AE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C8240A82BE15CC900E965AE /* Preview Assets.xcassets */; };
+		6C8240B12BE15EB300E965AE /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6C8240B02BE15EB300E965AE /* PythonKit */; };
+		6C8240B32BE1608500E965AE /* script.py in Resources */ = {isa = PBXBuildFile; fileRef = 6C8240B22BE1608500E965AE /* script.py */; };
+		6C8240B52BE1787900E965AE /* readCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240B42BE1787900E965AE /* readCSV.swift */; };
+		6C8240B72BE17F9A00E965AE /* time_series.csv in Resources */ = {isa = PBXBuildFile; fileRef = 6C8240B62BE17F9A00E965AE /* time_series.csv */; };
+		6C8240B92BE1803500E965AE /* SalesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240B82BE1803500E965AE /* SalesData.swift */; };
+		6C8240BB2BE1B6C900E965AE /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240BA2BE1B6C900E965AE /* ChartsView.swift */; };
+		6C8240BF2BE297FB00E965AE /* AverageWFilters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240BE2BE297FB00E965AE /* AverageWFilters.swift */; };
+		6C8240C12BE31A7E00E965AE /* OverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240C02BE31A7D00E965AE /* OverView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +27,13 @@
 		6C8240A32BE15CC600E965AE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6C8240A52BE15CC900E965AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C8240A82BE15CC900E965AE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6C8240B22BE1608500E965AE /* script.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = script.py; sourceTree = "<group>"; };
+		6C8240B42BE1787900E965AE /* readCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readCSV.swift; sourceTree = "<group>"; };
+		6C8240B62BE17F9A00E965AE /* time_series.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = time_series.csv; sourceTree = "<group>"; };
+		6C8240B82BE1803500E965AE /* SalesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesData.swift; sourceTree = "<group>"; };
+		6C8240BA2BE1B6C900E965AE /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
+		6C8240BE2BE297FB00E965AE /* AverageWFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageWFilters.swift; sourceTree = "<group>"; };
+		6C8240C02BE31A7D00E965AE /* OverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8240B12BE15EB300E965AE /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +68,14 @@
 			isa = PBXGroup;
 			children = (
 				6C8240A12BE15CC600E965AE /* SaleScopeApp.swift */,
+				6C8240BE2BE297FB00E965AE /* AverageWFilters.swift */,
+				6C8240C02BE31A7D00E965AE /* OverView.swift */,
+				6C8240B42BE1787900E965AE /* readCSV.swift */,
+				6C8240B82BE1803500E965AE /* SalesData.swift */,
+				6C8240B62BE17F9A00E965AE /* time_series.csv */,
 				6C8240A32BE15CC600E965AE /* ContentView.swift */,
+				6C8240BA2BE1B6C900E965AE /* ChartsView.swift */,
+				6C8240B22BE1608500E965AE /* script.py */,
 				6C8240A52BE15CC900E965AE /* Assets.xcassets */,
 				6C8240A72BE15CC900E965AE /* Preview Content */,
 			);
@@ -83,6 +106,9 @@
 			dependencies = (
 			);
 			name = SaleScope;
+			packageProductDependencies = (
+				6C8240B02BE15EB300E965AE /* PythonKit */,
+			);
 			productName = SaleScope;
 			productReference = 6C82409E2BE15CC600E965AE /* SaleScope.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +137,9 @@
 				Base,
 			);
 			mainGroup = 6C8240952BE15CC600E965AE;
+			packageReferences = (
+				6C8240AF2BE15EB300E965AE /* XCRemoteSwiftPackageReference "PythonKit" */,
+			);
 			productRefGroup = 6C82409F2BE15CC600E965AE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -126,6 +155,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C8240A92BE15CC900E965AE /* Preview Assets.xcassets in Resources */,
+				6C8240B32BE1608500E965AE /* script.py in Resources */,
+				6C8240B72BE17F9A00E965AE /* time_series.csv in Resources */,
 				6C8240A62BE15CC900E965AE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,7 +168,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8240C12BE31A7E00E965AE /* OverView.swift in Sources */,
+				6C8240B92BE1803500E965AE /* SalesData.swift in Sources */,
+				6C8240B52BE1787900E965AE /* readCSV.swift in Sources */,
+				6C8240BB2BE1B6C900E965AE /* ChartsView.swift in Sources */,
 				6C8240A42BE15CC600E965AE /* ContentView.swift in Sources */,
+				6C8240BF2BE297FB00E965AE /* AverageWFilters.swift in Sources */,
 				6C8240A22BE15CC600E965AE /* SaleScopeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +380,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6C8240AF2BE15EB300E965AE /* XCRemoteSwiftPackageReference "PythonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pvieito/PythonKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6C8240B02BE15EB300E965AE /* PythonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C8240AF2BE15EB300E965AE /* XCRemoteSwiftPackageReference "PythonKit" */;
+			productName = PythonKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6C8240962BE15CC600E965AE /* Project object */;
 }
