@@ -74,7 +74,7 @@ func retrieveHistoricalData() -> [Int: [HistoricalRecord]] {
 }
 
 func fetchPredictedSales(completion: @escaping ([PredictedRecord]) -> Void) {
-    guard let url = URL(string: "http://192.168.1.74:5008/dic") else {
+    guard let url = URL(string: "http://10.31.140.204:5008/dic") else {
         print("Invalid URL")
         return
     }
@@ -116,6 +116,9 @@ func fetchPredictedSales(completion: @escaping ([PredictedRecord]) -> Void) {
 }
 
 struct DecemberView: View {
+    
+    @Binding var isDecember: Bool
+    
     @State private var historicalDataByYear: [Int: [HistoricalRecord]] = [:]
     @State private var predictedData: [PredictedRecord] = []
     
@@ -126,6 +129,21 @@ struct DecemberView: View {
     
     var body: some View {
         ZStack {
+            Color.white
+            
+            Button {
+                withAnimation (.easeInOut(duration: 0.5)){
+                    isDecember = false
+                }
+            } label: {
+                Text("Go Back")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                .cornerRadius(10)
+            .position(x: UISW * 0.46, y: UISH * 0.13)
             
             ZStack{
                 Text("December Forecaster")
@@ -200,6 +218,9 @@ protocol HasDateAndSales2: Identifiable {
 extension HistoricalRecord: HasDateAndSales2 {}
 extension PredictedRecord: HasDateAndSales2 {}
 
-#Preview {
-    DecemberView()
+struct December_Previews: PreviewProvider {
+    static var previews: some View {
+        let december = State(initialValue: false)
+        return DecemberView(isDecember: december.projectedValue)
+    }
 }

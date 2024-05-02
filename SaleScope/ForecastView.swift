@@ -67,7 +67,7 @@ func loadSalesDataGroupedByYear() -> [Int: [SaleRecord]] {
 
 // Ajusta también la carga de datos predichos para usar la fecha normalizada
 func loadPredictedSalesData(completion: @escaping ([PredictionRecord]) -> Void) {
-    guard let url = URL(string: "http://192.168.1.74:5008/predict") else {
+    guard let url = URL(string: "http://10.31.140.204:5008/predict") else {
         print("Invalid URL")
         return
     }
@@ -112,6 +112,8 @@ struct AxisLabelColorModifier: ViewModifier {
 }
 
 struct ForecastView: View {
+    @Binding var isForecast: Bool
+    
     @State private var salesDataByYear: [Int: [SaleRecord]] = [:]
     @State private var predictionsDataByYear: [Int: [PredictionRecord]] = [:]
     
@@ -127,6 +129,22 @@ struct ForecastView: View {
     
     var body: some View {
         ZStack{
+            
+            Color.white
+            
+            Button {
+                withAnimation (.easeInOut(duration: 0.5)){
+                    isForecast = false
+                }
+            } label: {
+                Text("Go Back")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                .cornerRadius(10)
+            .position(x: UISW * 0.11, y: UISH * 0.22)
             
             ZStack{
                 Text("Summer Sales (")
@@ -373,7 +391,10 @@ extension SaleRecord: HasDateAndSales {}
 extension PredictionRecord: HasDateAndSales {}
 
 // Implementa tu estructura de vista previa si la necesitas
-#Preview {
-    ForecastView()
+struct Forecast_Previews: PreviewProvider {
+    static var previews: some View {
+        let forecast = State(initialValue: false)
+        return ForecastView(isForecast: forecast.projectedValue)
+    }
 }
 

@@ -2,6 +2,9 @@ import SwiftUI
 import Charts
 
 struct AverageWFiltersView: View {
+    @State var isForecast: Bool = false
+    @State var isDecember: Bool = false
+    
     @State private var salesRecords: [SalesRecord] = []
     @State private var selectedYear: String = ""
     @State private var showAllYears: Bool = true
@@ -20,7 +23,12 @@ struct AverageWFiltersView: View {
         self.totalSales = salesData.reduce(0) { $0 + $1.sales }
         self.totalRecords = salesData.count
     }
+    
+    var UISW: CGFloat = UIScreen.main.bounds.width
+    var UISH: CGFloat = UIScreen.main.bounds.height
+    
     var body: some View {
+        ZStack{
             VStack {
                 // Header similar al de OverView
                 ZStack {
@@ -212,7 +220,46 @@ struct AverageWFiltersView: View {
                 .onAppear(perform: loadData)
             }
             .offset(y:-30)
+            
+            Button {
+                withAnimation (.easeInOut(duration: 0.5)){
+                    isForecast = true
+                    isDecember = false
+                }
+            } label: {
+                Text("Summer")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(.white)
+                .cornerRadius(10)
+            .position(x: UISW * 0.81, y: UISH * 0.14)
+            
+            Button {
+                withAnimation (.easeInOut(duration: 0.5)){
+                    isDecember = true
+                    isForecast = false
+                }
+            } label: {
+                Text("December")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(.white)
+                .cornerRadius(10)
+            .position(x: UISW * 0.92, y: UISH * 0.14)
+        }
         
+        if isForecast {
+            ForecastView(isForecast: $isForecast)
+                .offset(y: isForecast ? -UISH * 0.5 : UISH * 2)
+        }
+        if isDecember {
+            DecemberView(isDecember: $isDecember)
+                .offset(y: isDecember ? -UISH * 0.5 : UISH * 2)
+        }
     }
 
     private var uniqueYears: [String] {
