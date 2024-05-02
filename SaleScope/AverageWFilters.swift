@@ -214,12 +214,32 @@ struct AverageWFiltersView: View {
                             
                         }
                     }
-                    
+                    Text(" General Standard Deviation: \(calculateStandardDeviation(records: salesRecords), specifier: "%.2f")")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding()
                 }
                 .padding(.horizontal,90)
                 .onAppear(perform: loadData)
             }
             .offset(y:-30)
+            
+            Button {
+                llamarEndpoint(method: "POST", endpoint: "generar_csv")
+                
+            } label: {
+                Text("Generate CSV")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(.white)
+                .cornerRadius(10)
+            .position(x: UISW * 0.65, y: UISH * 0.14)
             
             Button {
                 withAnimation (.easeInOut(duration: 0.5)){
@@ -234,7 +254,7 @@ struct AverageWFiltersView: View {
                     .padding(.vertical, 10)
             }.background(.white)
                 .cornerRadius(10)
-            .position(x: UISW * 0.81, y: UISH * 0.14)
+            .position(x: UISW * 0.795, y: UISH * 0.14)
             
             Button {
                 withAnimation (.easeInOut(duration: 0.5)){
@@ -273,7 +293,29 @@ struct AverageWFiltersView: View {
     private var filteredRecords: [SalesRecord] {
         salesRecords.filter { $0.year == selectedYear }
     }
-
+    
+    func llamarEndpoint(method: String, endpoint: String) {
+            guard let url = URL(string: "http://10.31.140.204:5008/\(endpoint)") else {
+                print("URL inválida")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = method
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard error == nil else {
+                    print("Error: \(error!)")
+                    return
+                }
+                
+                if let data = data {
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print("Respuesta del servidor: \(jsonString)")
+                    }
+                }
+            }.resume()
+        }
 
     private func calculateMonthlyAverages(records: [SalesRecord]) -> [SalesRecord] {
         let years = Set(records.map { $0.year })
@@ -299,14 +341,14 @@ struct AverageWFiltersView: View {
         return results.sorted(by: { $0.date < $1.date })
     }
     private func calculateStandardDeviation(records: [SalesRecord]) -> Double {
-        guard records.count > 1 else { return 0.0 }
-        
-        let mean = records.reduce(0.0) { $0 + Double($1.sales) } / Double(records.count)
-        let sumOfSquaredDiffs = records.reduce(0.0) {
-            $0 + (Double($1.sales) - mean) * (Double($1.sales) - mean)
+            let filteredRecords = records.filter { $0.sales > 0 }
+            guard !filteredRecords.isEmpty else { return 0.0 }
+
+            let mean = filteredRecords.reduce(0.0) { $0 + Double($1.sales) } / Double(filteredRecords.count)
+            let sumOfSquaredDiffs = filteredRecords.reduce(0.0) { $0 + (Double($1.sales) - mean) * (Double($1.sales) - mean) }
+
+            return sqrt(sumOfSquaredDiffs / Double(filteredRecords.count - 1))
         }
-        return sqrt(sumOfSquaredDiffs / Double(records.count - 1))  // Uso correcto de la desviación estándar de la muestra
-    }
 
     private func barChartView(records: [SalesRecord], showAverageLine: Bool) -> some View {
         let overallAverage = records.map { Double($0.sales) }.reduce(0, +) / Double(records.count)
