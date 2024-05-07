@@ -71,7 +71,7 @@ struct AverageWFiltersView: View {
                 }
                 .padding(.bottom, 0)
 
-                ScrollView {
+                ScrollView(/*@START_MENU_TOKEN@*/.vertical/*@END_MENU_TOKEN@*/, showsIndicators: false) {
                     // Botones de OverView incorporados en AverageWFiltersView
                     VStack {
                         HStack {
@@ -161,20 +161,20 @@ struct AverageWFiltersView: View {
                                 }
 
                                 // Botón grid2: Activa stackYears, desactiva las líneas y establece el año a "All Years"
-//                                Button(action: {
-//                                    selectedGridButton = selectedGridButton == "grid2" ? nil : "grid2"
-//                                    stackYears = selectedGridButton == "grid2"
-//                                    if stackYears {
-//                                        showStandardDeviationLine = false
-//                                        showAverageLine = false
-//                                    }
-//                                    selectedYear = "" // Ajustar a "All Years"
-//                                }) {
-//                                    Image(selectedGridButton == "grid2" ? "grid2on" : "grid2off")
-//                                        .resizable()
-//                                        .scaledToFit()
-//                                        .frame(width: 60, height: 60)
-//                                }
+                                Button(action: {
+                                    selectedGridButton = selectedGridButton == "grid2" ? nil : "grid2"
+                                    stackYears = selectedGridButton == "grid2"
+                                    if stackYears {
+                                        showStandardDeviationLine = false
+                                        showAverageLine = false
+                                    }
+                                    selectedYear = "" // Ajustar a "All Years"
+                                }) {
+                                    Image(selectedGridButton == "grid2" ? "grid2on" : "grid2off")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 60, height: 60)
+                                }
 
                                 // Botón grid3: Solo interactivo si grid2 no está activo y basa su estado en las líneas de promedio y desviación estándar
                                 Button(action: {
@@ -231,7 +231,7 @@ struct AverageWFiltersView: View {
 
                                         
                 }
-                .padding(.horizontal,40)
+                .padding(.horizontal,30)
                 .onAppear(perform: loadData)
             }
             .offset(y:-30)
@@ -384,14 +384,24 @@ struct AverageWFiltersView: View {
             return sqrt(sumOfSquaredDiffs / Double(filteredRecords.count - 1))
         }
 
+    
+    private func monthOffIsActive() -> Bool {
+        // Aquí asumo que hay una manera de determinar si "monthoff" está activo. Ajusta según tu implementación.
+        // Podría ser un estado o una verificación de algún valor.
+        return !showAllYears
+    }
+
+
+
     private func barChartView(records: [SalesRecord], showAverageLine: Bool) -> some View {
-        let overallAverage = records.map { Double($0.sales) }.reduce(0, +) / Double(records.count)
-        let standardDeviation = calculateStandardDeviation(records: records)
+        let data = stackYears && selectedYear == "" ? calculateTotalMonthlySales(records: salesRecords) : records
+        let overallAverage = data.map { Double($0.sales) }.reduce(0, +) / Double(data.count)
+        let standardDeviation = calculateStandardDeviation(records: data)
 
         return Chart {
-            ForEach(records, id: \.id) { record in
+            ForEach(data, id: \.id) { record in
                 BarMark(
-                    x: .value("Month", stackYears ? record.month : "\(record.month)-\(record.year)"),
+                    x: .value("Month", "\(record.month)-\(record.year)"),
                     y: .value("Sales", Double(record.sales))
                 )
                 .foregroundStyle(record.year == uniqueYears.first ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
@@ -400,7 +410,7 @@ struct AverageWFiltersView: View {
                         .bold()
                         .foregroundColor(record.year == uniqueYears.first ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 15)) // Intento de redondear esquinas
+                .clipShape(RoundedRectangle(cornerRadius: 15))
             }
             if showAverageLine {
                 RuleMark(
@@ -424,7 +434,6 @@ struct AverageWFiltersView: View {
             if showStandardDeviationLine {
                 RuleMark(
                     y: .value("Standard Deviation", standardDeviation)
-                        
                 )
                 .opacity(0.5)
                 .foregroundStyle(.gray)
@@ -436,20 +445,23 @@ struct AverageWFiltersView: View {
                         .background(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)).fill(Color.white))
                         .overlay(
                             RoundedRectangle(cornerSize: CGSize(width: 5, height: 5))
-                                .stroke(Color.gray, lineWidth: 2.5))
-                    
+                                .stroke(Color.gray, lineWidth: 2.5)
+                        )
                 }
             }
         }
     }
-    
-    private func monthOffIsActive() -> Bool {
-        // Aquí asumo que hay una manera de determinar si "monthoff" está activo. Ajusta según tu implementación.
-        // Podría ser un estado o una verificación de algún valor.
-        return !showAllYears
+
+    private func calculateTotalMonthlySales(records: [SalesRecord]) -> [SalesRecord] {
+        let groupedByMonth = Dictionary(grouping: records, by: { $0.month })
+        return groupedByMonth.compactMap { month, records in
+            let totalSales = records.reduce(0) { $0 + $1.sales }
+            if let firstRecord = records.first {
+                return SalesRecord(date: firstRecord.date, sales: totalSales, month: month, year: "All")
+            }
+            return nil
+        }.sorted(by: { $0.month < $1.month })
     }
-
-
 
 
     private var monthRecords: [SalesRecord] {
@@ -465,8 +477,14 @@ struct AverageWFiltersView: View {
                     x: .value("Date", record.date),
                     y: .value("Sales", Double(record.sales))
                 )
+                .annotation(position: .top) {
+                    Text("\(record.sales)")
+                        .bold()
+                        .foregroundColor(record.year == uniqueYears.first ? Color.green : Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) )
+                }
                 .foregroundStyle(record.year == "2018" ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
                 .symbol(Circle())
+                
             }
         }
     }
@@ -480,7 +498,7 @@ struct AverageWFiltersView: View {
         return salesRecords.filter { $0.year == selectedYear }.reduce(0) { $0 + $1.sales }
     }
 
-
+    
     private func loadData() {
         DispatchQueue.global(qos: .userInteractive).async {
             let records = readCSV(from: "time_series").map { (date, sales) in
