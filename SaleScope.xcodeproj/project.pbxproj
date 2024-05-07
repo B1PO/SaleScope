@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2863C9492BE9C36800A9B80C /* PopUp-GeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2863C9482BE9C36800A9B80C /* PopUp-GeneralView.swift */; };
 		28A481622BE38C95009707C3 /* DecemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A481602BE38C95009707C3 /* DecemberView.swift */; };
 		28A481632BE38C95009707C3 /* ForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A481612BE38C95009707C3 /* ForecastView.swift */; };
 		6C8240A22BE15CC600E965AE /* SaleScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8240A12BE15CC600E965AE /* SaleScopeApp.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2863C9482BE9C36800A9B80C /* PopUp-GeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopUp-GeneralView.swift"; sourceTree = "<group>"; };
 		28A481602BE38C95009707C3 /* DecemberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecemberView.swift; sourceTree = "<group>"; };
 		28A481612BE38C95009707C3 /* ForecastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
 		6C82409E2BE15CC600E965AE /* SaleScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaleScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +54,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2863C94A2BE9C36E00A9B80C /* PopUps */ = {
+			isa = PBXGroup;
+			children = (
+				2863C9482BE9C36800A9B80C /* PopUp-GeneralView.swift */,
+			);
+			path = PopUps;
+			sourceTree = "<group>";
+		};
 		6C8240952BE15CC600E965AE = {
 			isa = PBXGroup;
 			children = (
@@ -73,6 +83,7 @@
 			children = (
 				6C8240A12BE15CC600E965AE /* SaleScopeApp.swift */,
 				6C8240BE2BE297FB00E965AE /* AverageWFilters.swift */,
+				2863C94A2BE9C36E00A9B80C /* PopUps */,
 				6C8240C02BE31A7D00E965AE /* OverView.swift */,
 				28A481602BE38C95009707C3 /* DecemberView.swift */,
 				28A481612BE38C95009707C3 /* ForecastView.swift */,
@@ -178,6 +189,7 @@
 				6C8240B92BE1803500E965AE /* SalesData.swift in Sources */,
 				6C8240B52BE1787900E965AE /* readCSV.swift in Sources */,
 				6C8240BB2BE1B6C900E965AE /* ChartsView.swift in Sources */,
+				2863C9492BE9C36800A9B80C /* PopUp-GeneralView.swift in Sources */,
 				6C8240A42BE15CC600E965AE /* ContentView.swift in Sources */,
 				28A481632BE38C95009707C3 /* ForecastView.swift in Sources */,
 				6C8240BF2BE297FB00E965AE /* AverageWFilters.swift in Sources */,

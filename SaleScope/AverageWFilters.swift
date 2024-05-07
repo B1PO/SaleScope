@@ -5,6 +5,8 @@ struct AverageWFiltersView: View {
     @State var isForecast: Bool = false
     @State var isDecember: Bool = false
     
+    @State var isPopup: Bool = false
+    
     @State private var salesRecords: [SalesRecord] = []
     @State private var selectedYear: String = ""
     @State private var showAllYears: Bool = true
@@ -229,6 +231,22 @@ struct AverageWFiltersView: View {
             .offset(y:-30)
             
             Button {
+                withAnimation (.easeInOut(duration: 0.5)){
+                    isPopup = true
+                    isForecast = false
+                    isDecember = false
+                }
+            } label: {
+                Text("Top Sales")
+                    .font(.custom("Arial", size: 20)).bold()
+                    .foregroundStyle(Color(UIColor(red: 0.37, green: 0.29, blue: 0.65, alpha: 1.00)))
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+            }.background(.white)
+                .cornerRadius(10)
+            .position(x: UISW * 0.5, y: UISH * 0.14)
+            
+            Button {
                 llamarEndpoint(method: "POST", endpoint: "generar_csv")
                 
             } label: {
@@ -270,6 +288,16 @@ struct AverageWFiltersView: View {
             }.background(.white)
                 .cornerRadius(10)
             .position(x: UISW * 0.92, y: UISH * 0.14)
+            
+            Rectangle()
+                .edgesIgnoringSafeArea(.all)
+                .foregroundColor(.black.opacity(isPopup ? 0.8 : 0))
+                
+            if isPopup {
+                PopUp_GeneralView(isPopUp: $isPopup)
+                    .offset(y: isPopup ? 0 : UISH * 2)
+            }
+            
         }
         
         if isForecast {
