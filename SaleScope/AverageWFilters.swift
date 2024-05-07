@@ -231,7 +231,7 @@ struct AverageWFiltersView: View {
 
                                         
                 }
-                .padding(.horizontal,90)
+                .padding(.horizontal,40)
                 .onAppear(perform: loadData)
             }
             .offset(y:-30)
