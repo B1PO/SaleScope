@@ -75,6 +75,56 @@ struct AverageWFiltersView: View {
                     // Botones de OverView incorporados en AverageWFiltersView
                     VStack {
                         HStack {
+                            Section {
+                                if selectedYear != "" && selectedYear != "All Years" {
+                                    Text("Total Sales for \(selectedYear): \(totalSalesForSelectedYear())")
+                                        .bold()
+                                        .padding()
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                        .padding()
+                                    Spacer()
+                                    
+                                }else{
+                                    Spacer()
+                                }
+                            }
+                            HStack {
+                                Spacer()
+                                // Botones centrales
+                                Button("Total Records: \(totalRecords)") {
+                                    // Acción para el botón central 1
+                                }
+                                .buttonStyle(.automatic)
+                                .foregroundColor(.white)
+                                .bold()
+                                .padding(20)
+                                .background(Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255))
+                                .cornerRadius(10)
+                                
+                                Button("Total Sales: \(totalSales)") {
+                                    // Acción para el botón central 2
+                                }
+                                .buttonStyle(.automatic)
+                                .foregroundColor(.white)
+                                .bold()
+                                .padding(20)
+                                .background(Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255))
+                                .cornerRadius(10)
+                                Spacer()
+                            }
+                            Text(" General Standard Deviation: \(calculateStandardDeviation(records: salesRecords), specifier: "%.2f")")
+                                .bold()
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding()
+                        }
+                        .padding(.bottom, 20)
+                        .padding(.bottom, -40)
+                        HStack {
                             Group {
                                 Button(action: {
                                     self.selectedButton = "year"
@@ -111,20 +161,20 @@ struct AverageWFiltersView: View {
                                 }
 
                                 // Botón grid2: Activa stackYears, desactiva las líneas y establece el año a "All Years"
-                                Button(action: {
-                                    selectedGridButton = selectedGridButton == "grid2" ? nil : "grid2"
-                                    stackYears = selectedGridButton == "grid2"
-                                    if stackYears {
-                                        showStandardDeviationLine = false
-                                        showAverageLine = false
-                                    }
-                                    selectedYear = "" // Ajustar a "All Years"
-                                }) {
-                                    Image(selectedGridButton == "grid2" ? "grid2on" : "grid2off")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 60, height: 60)
-                                }
+//                                Button(action: {
+//                                    selectedGridButton = selectedGridButton == "grid2" ? nil : "grid2"
+//                                    stackYears = selectedGridButton == "grid2"
+//                                    if stackYears {
+//                                        showStandardDeviationLine = false
+//                                        showAverageLine = false
+//                                    }
+//                                    selectedYear = "" // Ajustar a "All Years"
+//                                }) {
+//                                    Image(selectedGridButton == "grid2" ? "grid2on" : "grid2off")
+//                                        .resizable()
+//                                        .scaledToFit()
+//                                        .frame(width: 60, height: 60)
+//                                }
 
                                 // Botón grid3: Solo interactivo si grid2 no está activo y basa su estado en las líneas de promedio y desviación estándar
                                 Button(action: {
@@ -143,37 +193,11 @@ struct AverageWFiltersView: View {
 
 
                         }
-                        .padding(.bottom, 20)
                         
-                        HStack {
-                            Spacer()
-                            // Botones centrales
-                            Button("Total Records: \(totalRecords)") {
-                                // Acción para el botón central 1
-                            }
-                            .buttonStyle(.automatic)
-                            .foregroundColor(.white)
-                            .bold()
-                            .padding(20)
-                            .background(Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255))
-                            .cornerRadius(10)
-                            
-                            Button("Total Sales: \(totalSales)") {
-                                // Acción para el botón central 2
-                            }
-                            .buttonStyle(.automatic)
-                            .foregroundColor(.white)
-                            .bold()
-                            .padding(20)
-                            .background(Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255))
-                            .cornerRadius(10)
-                            Spacer()
-                        }
+                        
 
                     }
-                    
 
-                    // Sección original de AverageWFilters incorporada aquí dentro del ScrollView
                     Section("") {
                         Picker("Select Year", selection: $selectedYear) {
                             Text("All Years").tag("").disabled(selectedButton == "month" && monthOffIsActive())
@@ -195,35 +219,17 @@ struct AverageWFiltersView: View {
                                 Text("No data available for selected year.")
                             }
                         } else if selectedButton == "month" {
-                            if !monthRecords.isEmpty && !monthOffIsActive() {
-                                monthChartView(records: monthRecords)
+                            let recordsToDisplay = selectedYear.isEmpty ? monthRecordsForAllYears() : monthRecords
+                            if !monthRecordsForAllYears().isEmpty {
+                                monthChartView(records: monthRecordsForAllYears())
                                     .frame(height: 350)
                             } else {
                                 Text("Month off is active or no data available for June and July.")
                             }
                         }
                     }
-                    Section {
-                        if selectedYear != "" && selectedYear != "All Years" {
-                            Text("Total Sales for \(selectedYear): \(totalSalesForSelectedYear())")
-                                .font(.title)
-                                .bold()
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding()
-                            
-                        }
-                    }
-                    Text(" General Standard Deviation: \(calculateStandardDeviation(records: salesRecords), specifier: "%.2f")")
-                        .font(.title)
-                        .bold()
-                        .padding()
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding()
+
+                                        
                 }
                 .padding(.horizontal,90)
                 .onAppear(perform: loadData)
@@ -388,31 +394,52 @@ struct AverageWFiltersView: View {
                     x: .value("Month", stackYears ? record.month : "\(record.month)-\(record.year)"),
                     y: .value("Sales", Double(record.sales))
                 )
-                .foregroundStyle(record.year == uniqueYears.first ? Color.blue : Color.green)
-                .foregroundStyle(by: .value("Year", record.year))
-                
-                
+                .foregroundStyle(record.year == uniqueYears.first ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
+                .annotation(position: .top) {
+                    Text("\(record.sales)")
+                        .bold()
+                        .foregroundColor(record.year == uniqueYears.first ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
+                }
                 .clipShape(RoundedRectangle(cornerRadius: 15)) // Intento de redondear esquinas
             }
             if showAverageLine {
                 RuleMark(
                     y: .value("Average Sales", overallAverage)
                 )
-                .foregroundStyle(.black)
-                .annotation(position: .top, alignment: .center) {
+                .opacity(0.7)
+                .foregroundStyle(.gray)
+                .annotation(position: .top, alignment: .trailing) {
                     Text("Avg: \(Int(overallAverage))")
-                }
-            }
-            if showStandardDeviationLine {
-                RuleMark(
-                    y: .value("Standard Deviation", overallAverage + standardDeviation)
-                )
-                .foregroundStyle(.black)
-                .annotation(position: .top, alignment: .center) {
-                    Text("Std Dev: \(Int(standardDeviation))")
+                        .bold()
+                        .foregroundStyle(.gray)
+                        .padding(5)
+                        .background(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)).fill(Color.white))
+                        .overlay(
+                            RoundedRectangle(cornerSize: CGSize(width: 5, height: 5))
+                                .stroke(Color.gray, lineWidth: 2.5)
+                        )
                 }
             }
 
+            if showStandardDeviationLine {
+                RuleMark(
+                    y: .value("Standard Deviation", standardDeviation)
+                        
+                )
+                .opacity(0.5)
+                .foregroundStyle(.gray)
+                .annotation(position: .top, alignment: .trailing) {
+                    Text("Std Dev: \(Int(standardDeviation))")
+                        .bold()
+                        .foregroundStyle(.gray)
+                        .padding(5)
+                        .background(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5)).fill(Color.white))
+                        .overlay(
+                            RoundedRectangle(cornerSize: CGSize(width: 5, height: 5))
+                                .stroke(Color.gray, lineWidth: 2.5))
+                    
+                }
+            }
         }
     }
     
@@ -429,18 +456,24 @@ struct AverageWFiltersView: View {
         guard selectedButton == "month" else { return [] }
         return salesRecords.filter { ($0.month == "06" || $0.month == "07") && $0.year == selectedYear }
     }
+    
     private func monthChartView(records: [SalesRecord]) -> some View {
-        Chart {
-            ForEach(records, id: \.id) { record in
+        let filteredRecords = selectedYear == "" ? monthRecordsForAllYears() : monthRecords
+        return Chart {
+            ForEach(filteredRecords, id: \.id) { record in
                 LineMark(
                     x: .value("Date", record.date),
                     y: .value("Sales", Double(record.sales))
                 )
-                .foregroundStyle(record.year == uniqueYears.first ? Color.pink : Color.purple)
-                    .symbol(Circle())
+                .foregroundStyle(record.year == "2018" ? Color(red: 119 / 255, green: 95 / 255, blue: 209 / 255) : Color.green)
+                .symbol(Circle())
             }
         }
     }
+
+    private func monthRecordsForAllYears() -> [SalesRecord] {
+           salesRecords.filter { $0.month == "06" || $0.month == "07" }
+       }
     
     private func totalSalesForSelectedYear() -> Int {
         guard selectedYear != "", selectedYear != "All Years" else { return 0 }
